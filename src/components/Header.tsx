@@ -1,36 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../public/assets/images/logo.png"; // Adjust the path as necessary
+import logo from "../../public/assets/images/logo.png";
+import { SignInButton } from "./ui/SignInButton";
+import NavLink from "./ui/NavLink";
 
 export const Header = () => {
   return (
     <>
       <header>
-        <div className="flex items-center justify-between py-2">
-          <div className="w-[120px]">
+        <div className="flex items-center justify-between py-4">
+          <div className="w-[100px]">
             <Link href="/">
               <Image src={logo} alt="Ghatakshab"></Image>
             </Link>
           </div>
           <nav className="flex flex-row items-center space-x-4">
-            <ul className="flex space-x-4">
-              <li>
-                <Link href="/">Home</Link>
-              </li>
-              <li>
-                <Link href="/about">About</Link>
-              </li>
-              <li>
-                <Link href="/faq">FAQ</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contact</Link>
-              </li>
+            <ul className="flex space-x-8">
+              <NavLink link={"/"}>Home</NavLink>
+              <NavLink link={"/about"}>About</NavLink>
+              <NavLink link={"/faq"}>FAQ</NavLink>
+              <NavLink link={"/contact"}>Contact</NavLink>
             </ul>
           </nav>
           <div>
-            <button>Login</button>
-            <button>Sign Up</button>
+            <SignInButton />
           </div>
         </div>
       </header>
