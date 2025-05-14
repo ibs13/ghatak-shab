@@ -1,0 +1,84 @@
+"use client";
+import React, { useState } from "react";
+import Button from "../Button";
+import Input from "../inputs/Input";
+import { Logger } from "@/utils/Logger";
+
+export default function SignInForm() {
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string | null;
+    const password = formData.get("password") as string | null;
+
+    // Email Regex Patterns
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!email || !password) {
+      setErrorMessage("Please fill out both fields.");
+      Logger.warn(errorMessage);
+      return;
+    }
+
+    // Validate Email Format
+    if (!email || !emailRegex.test(email)) {
+      setErrorMessage("Invalid email format.");
+      Logger.warn(errorMessage);
+      return;
+    }
+
+    // Add your sign-in logic here
+
+    // try {
+    //   await login(email, password);
+    //   Logger.info("Login Succcessfully");
+    //   navigate("/"); // Redirect after successful login
+    // } catch (error) {
+    //   setErrorMessage("Invalid credentials. Please try again.");
+    //   Logger.error("Login failed for:", email, error);
+    // }
+  };
+  return (
+    <>
+      <div className="w-1/2 flex items-center justify-center">
+        <div className="w-96 bg-white p-8 rounded-lg shadow-md my-20">
+          <h2 className="text-2xl font-bold mb-4">Sign In</h2>
+          <form onSubmit={handleSignIn}>
+            <div className="mb-4">
+              <Input
+                label="Email"
+                name="email"
+                type="text"
+                id="email"
+                htmlFor="email"
+                placeholder="Enter your email"
+              />
+            </div>
+            <div className="mb-4">
+              <Input
+                label="Password"
+                name="password"
+                type="password"
+                id="password"
+                htmlFor="password"
+                placeholder="Enter your password"
+              />
+            </div>
+            <div className="mb-4">
+              <Button isFullWidth={true}>Sign in</Button>
+            </div>
+
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="text-[12px] text-center text-red-700 mt-2 font-semibold sm:text-[15px]">
+                {errorMessage}
+              </div>
+            )}
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}

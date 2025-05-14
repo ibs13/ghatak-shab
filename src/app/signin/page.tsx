@@ -1,5 +1,4 @@
-import Input from "@/components/ui/inputs/Input";
-import React from "react";
+import SignInForm from "@/components/ui/forms/SignInForm";
 
 const SignIn = () => {
   return (
@@ -13,37 +12,7 @@ const SignIn = () => {
             </p>
           </div>
         </div>
-        <div className="w-1/2 flex items-center justify-center">
-          <div className="w-96 bg-white p-8 rounded-lg shadow-md my-20">
-            <h2 className="text-2xl font-bold mb-4">Sign In</h2>
-            <form>
-              <div className="mb-4">
-                <Input
-                  label="Email"
-                  name="email"
-                  type="email"
-                  id="email"
-                  htmlFor="email"
-                />
-              </div>
-              <div className="mb-4">
-                <Input
-                  label="Password"
-                  name="password"
-                  type="password"
-                  id="password"
-                  htmlFor="password"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[#824670] text-white py-2 rounded-md"
-              >
-                Sign In
-              </button>
-            </form>
-          </div>
-        </div>
+        <SignInForm />
       </div>
     </div>
   );

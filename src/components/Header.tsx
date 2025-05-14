@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../public/assets/images/logo.png";
-import { SignInButton } from "./ui/SignInButton";
+// import { SignInButton } from "./ui/SignInButton";
 import NavLink from "./ui/NavLink";
+import Button from "./ui/Button";
 
 export const Header = () => {
   return (
@@ -23,7 +24,7 @@ export const Header = () => {
             </ul>
           </nav>
           <div>
-            <SignInButton />
+            <Button href="/signin">Sign in</Button>
           </div>
         </div>
       </header>

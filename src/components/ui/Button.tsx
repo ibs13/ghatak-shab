@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from "next/navigation";
 import React, { ButtonHTMLAttributes, ReactNode } from "react";
 
 // Define the button variants, sizes, and colors
@@ -16,8 +18,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   rightIcon?: ReactNode;
   isFullWidth?: boolean;
   isDisabled?: boolean;
+  href?: string;
   className?: string;
   children: ReactNode;
+  onClick?: () => void;
 }
 
 // Utility function to combine class names
@@ -35,10 +39,12 @@ const Button: React.FC<ButtonProps> = ({
   rightIcon,
   isFullWidth = false,
   isDisabled = false,
+  href = "",
   className = "",
   children,
   ...rest
 }) => {
+  const router = useRouter();
   // Base styles that apply to all buttons
   const baseStyles =
     "rounded cursor-pointer font-medium transition-all focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed";
@@ -99,11 +105,27 @@ const Button: React.FC<ButtonProps> = ({
     className
   );
 
+  // Handle button click
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isDisabled || isLoading) {
+      e.preventDefault();
+      return;
+    }
+    if (href) {
+      router.push(href);
+    } else {
+      if (rest.onClick) {
+        rest.onClick();
+      }
+    }
+  };
+
   return (
     <button
       className={buttonClass}
       disabled={isDisabled || isLoading}
       {...rest}
+      onClick={handleClick}
     >
       {isLoading ? (
         <span className="flex items-center justify-center">
