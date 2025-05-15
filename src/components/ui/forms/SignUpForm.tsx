@@ -3,17 +3,25 @@ import React, { useState } from "react";
 import Button from "../Button";
 import Input from "../inputs/Input";
 import { Logger } from "@/utils/Logger";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth";
 
 export default function SignUpForm() {
-  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const router = useRouter();
+  const { signUp } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const [success, setSuccess] = React.useState<boolean>(false);
+  const [email, setEmail] = useState("");
+
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     setErrorMessage("");
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string | null;
     const password = formData.get("password") as string | null;
-    const repeatPassword = formData.get("repeatPassword") as string | null;
+    const confirmPassword = formData.get("confirmPassword") as string | null;
 
     // Email Regex Patterns
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -22,7 +30,7 @@ export default function SignUpForm() {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    if (!email || !password || !repeatPassword) {
+    if (!email || !password || !confirmPassword) {
       setErrorMessage("Please fill out all fields.");
       Logger.warn(errorMessage);
       return;
@@ -44,23 +52,42 @@ export default function SignUpForm() {
       return;
     }
     // Validate Password Match
-    if (password !== repeatPassword) {
+    if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
       Logger.warn(errorMessage);
       return;
     }
 
-    // Add your sign-in logic here
+    try {
+      const { error } = await signUp(email, password);
 
-    // try {
-    //   await login(email, password);
-    //   Logger.info("Login Succcessfully");
-    //   navigate("/"); // Redirect after successful login
-    // } catch (error) {
-    //   setErrorMessage("Invalid credentials. Please try again.");
-    //   Logger.error("Login failed for:", email, error);
-    // }
+      if (error) throw error;
+
+      // Registration successful
+      setSuccess(true);
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "Registration failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (success) {
+    return (
+      <div className="max-w-md mx-auto my-20 p-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-4">Check your email</h1>
+        <p className="mb-4">
+          We've sent a confirmation link to {email}. Please verify your email to
+          complete registration.
+        </p>
+        <Button isFullWidth={true} href="/signin">
+          Go to Signin
+        </Button>
+      </div>
+    );
+  }
   return (
     <>
       <div className="w-1/2 flex items-center justify-center">
@@ -89,12 +116,12 @@ export default function SignUpForm() {
             </div>
             <div className="mb-4">
               <Input
-                label="Repeat password"
-                name="repeatPassword"
+                label="Rewrite password"
+                name="confirmPassword"
                 type="password"
-                id="repeatPassword"
-                htmlFor="repeatPassword"
-                placeholder="Repeat your password"
+                id="confirmPassword"
+                htmlFor="confirmPassword"
+                placeholder="Confirm your password"
               />
             </div>
             <div className="mb-4">

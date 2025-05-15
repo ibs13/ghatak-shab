@@ -3,11 +3,16 @@ import React, { useState } from "react";
 import Button from "../Button";
 import Input from "../inputs/Input";
 import { Logger } from "@/utils/Logger";
+import { useAuth } from "@/context/auth";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
+  const router = useRouter();
+  const { signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const handleSignIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string | null;
@@ -29,17 +34,18 @@ export default function SignInForm() {
       return;
     }
 
-    // Add your sign-in logic here
+    try {
+      const { error } = await signIn(email, password);
 
-    // try {
-    //   await login(email, password);
-    //   Logger.info("Login Succcessfully");
-    //   navigate("/"); // Redirect after successful login
-    // } catch (error) {
-    //   setErrorMessage("Invalid credentials. Please try again.");
-    //   Logger.error("Login failed for:", email, error);
-    // }
+      if (error) throw error;
+      router.push("/dashboard");
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <>
       <div className="w-1/2 flex items-center justify-center">

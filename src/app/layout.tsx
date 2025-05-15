@@ -1,3 +1,4 @@
+import SessionProvider from "@/components/session-provider";
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
@@ -34,7 +35,9 @@ export default function RootLayout({
           <Header />
         </div>
         <hr className="border-[#824670]" />
-        <ClientErrorBoundary>{children}</ClientErrorBoundary>
+        <ClientErrorBoundary>
+          <SessionProvider>{children}</SessionProvider>
+        </ClientErrorBoundary>
       </body>
     </html>
   );
