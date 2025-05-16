@@ -1,11 +1,21 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../public/assets/images/logo.png";
-// import { SignInButton } from "./ui/SignInButton";
 import NavLink from "./ui/NavLink";
 import Button from "./ui/Button";
+import { useAuth } from "@/context/auth";
 
 export const Header = () => {
+  const { session, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
   return (
     <>
       <header>
@@ -23,8 +33,15 @@ export const Header = () => {
               <NavLink link={"/contact"}>Contact</NavLink>
             </ul>
           </nav>
+
           <div>
-            <Button href="/signin">Sign in</Button>
+            {session ? (
+              <div className="flex items-center gap-4">
+                <Button onClick={handleSignOut}>Sign Out</Button>
+              </div>
+            ) : (
+              <Button href="/signin">Sign In</Button>
+            )}
           </div>
         </div>
       </header>

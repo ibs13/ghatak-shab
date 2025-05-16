@@ -31,13 +31,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
-          <Header />
-        </div>
-        <hr className="border-[#824670]" />
-        <ClientErrorBoundary>
-          <SessionProvider>{children}</SessionProvider>
-        </ClientErrorBoundary>
+        <SessionProvider>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+            <Header />
+          </div>
+          <hr className="border-[#824670]" />
+          <ClientErrorBoundary>{children}</ClientErrorBoundary>
+        </SessionProvider>
       </body>
     </html>
   );

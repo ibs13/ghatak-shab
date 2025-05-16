@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import Button from "../Button";
 import Input from "../inputs/Input";
 import { Logger } from "@/utils/Logger";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth";
+import Link from "next/link";
 
 export default function SignUpForm() {
-  const router = useRouter();
   const { signUp } = useAuth();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -127,6 +126,17 @@ export default function SignUpForm() {
             <div className="mb-4">
               <Button isFullWidth={true}>Sign up</Button>
             </div>
+
+            <p className="text-[13px] text-gray-500 font-semibold">
+              Already have account?{" "}
+              <Link
+                href="/signin"
+                className="text-blue-500 ml-1 hover:underline"
+              >
+                Signin
+              </Link>{" "}
+              now
+            </p>
             {/* Error Message */}
             {errorMessage && (
               <div className="text-[12px] text-center text-red-700 mt-2 font-semibold sm:text-[15px]">

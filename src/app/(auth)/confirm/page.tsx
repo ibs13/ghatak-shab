@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
+import { Logger } from "@/utils/Logger";
 
 export default function ConfirmPage() {
   const searchParams = useSearchParams();
@@ -11,11 +12,13 @@ export default function ConfirmPage() {
   const router = useRouter();
   const [message, setMessage] = useState("Verifying your email...");
   const [error, setError] = useState<string | null>(null);
-
+  // token_hash=pkce_8bd95f172e52c2c30909dcefb57692de4427af474baf0d897e9a4c78&type=email
   useEffect(() => {
     const verifyEmail = async () => {
       const token_hash = searchParams.get("token_hash");
+      Logger.info("Token Hash: ", token_hash);
       const type = searchParams.get("type");
+      Logger.info("Type: ", type);
 
       if (token_hash && type === "signup") {
         try {

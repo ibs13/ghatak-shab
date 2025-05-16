@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import AuthProvider from "@/context/auth";
 import { cookies } from "next/headers";
 
@@ -7,7 +7,7 @@ export default async function SessionProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerSupabaseClient();
+  const supabase = createClient(cookies());
   const {
     data: { session },
   } = await supabase.auth.getSession();

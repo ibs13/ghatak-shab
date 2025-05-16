@@ -5,6 +5,7 @@ import Input from "../inputs/Input";
 import { Logger } from "@/utils/Logger";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -75,6 +76,24 @@ export default function SignInForm() {
             <div className="mb-4">
               <Button isFullWidth={true}>Sign in</Button>
             </div>
+
+            <Link
+              href=""
+              className="text-[13px] text-blue-500 mb-2 font-semiblod block hover:underline"
+            >
+              Forget password?
+            </Link>
+
+            <p className="text-[13px] text-gray-500 font-semibold">
+              Don't have any account?{" "}
+              <Link
+                href="/signup"
+                className="text-blue-500 ml-1 hover:underline"
+              >
+                Signup
+              </Link>{" "}
+              now
+            </p>
 
             {/* Error Message */}
             {errorMessage && (
