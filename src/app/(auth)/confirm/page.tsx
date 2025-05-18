@@ -12,7 +12,7 @@ export default function ConfirmPage() {
   const router = useRouter();
   const [message, setMessage] = useState("Verifying your email...");
   const [error, setError] = useState<string | null>(null);
-  // token_hash=pkce_8bd95f172e52c2c30909dcefb57692de4427af474baf0d897e9a4c78&type=email
+
   useEffect(() => {
     const verifyEmail = async () => {
       const token_hash = searchParams.get("token_hash");
@@ -36,6 +36,22 @@ export default function ConfirmPage() {
         } catch (err) {
           setError(err instanceof Error ? err.message : "Verification failed");
         }
+      } else if (token_hash && type === "recovery") {
+        try {
+          const { error } = await supabase.auth.verifyOtp({
+            type,
+            token_hash,
+          });
+
+          if (error) throw error;
+
+          setMessage(
+            "Email verified successfully! Redirecting to reset password..."
+          );
+          setTimeout(() => router.push("/reset-password"), 2000);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Verification failed");
+        }
       } else {
         setError("Invalid verification link");
       }
@@ -51,10 +67,10 @@ export default function ConfirmPage() {
           <h1 className="text-2xl font-bold mb-4 text-red-600">Error</h1>
           <p className="text-red-500">{error}</p>
           <button
-            onClick={() => router.push("/signup")}
+            onClick={() => router.push("/signin")}
             className="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
           >
-            Go to Sign Up
+            Go to Sign In
           </button>
         </div>
       ) : (

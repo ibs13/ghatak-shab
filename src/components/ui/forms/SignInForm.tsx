@@ -78,7 +78,7 @@ export default function SignInForm() {
             </div>
 
             <Link
-              href=""
+              href="/forgot-password"
               className="text-[13px] text-blue-500 mb-2 font-semiblod block hover:underline"
             >
               Forget password?
